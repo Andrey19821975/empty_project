@@ -6,6 +6,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 const imagemin = require('gulp-imagemin');
+var clean = require('gulp-clean');
 
 sass.compiler = require('node-sass');
 
@@ -62,5 +63,13 @@ gulp.task('prod:img', function () {
         ]))
         .pipe(gulp.dest('./prod/img'));
 });
+
+gulp.task('prod:clean', function () {
+    return gulp.src('./prod/**/*.*', { read: false })
+        .pipe(clean());
+});
+
+gulp.task('prod:all', gulp.parallel('prod:html', 'prod:css', 'prod:library', 'prod:js', 'prod:font', 'prod:img'));
+gulp.task('prod', gulp.series('prod:clean', 'prod:all'));
 
 
